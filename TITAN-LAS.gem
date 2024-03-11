@@ -1,0 +1,278 @@
+; Note: "fill" would work just as well as "rotate_fill" in the
+; 2D case, though the latter works in both 2D and 3D cases.
+
+# -- Spacing/dimensions ------------------------------
+
+# local dx = 0.5           -- sets scale of pa_define (0.5 means 0.5 mm/unit)
+# local x_offset = 13      -- keeps track of where to start optics in the x-axis
+# local y_offset = 35      -- keeps track of where to start optics in the y-axis starts at center of holder optics
+# local z_offset = 35      -- z-axis location for center of ion optics (should be half of pa size)
+# local bend_box_exit = 0  -- y-coordinate of exit to bender box     
+
+# --- Sample Holder and Extraction Electrodes -----------------------
+
+# local holder_length = 6.35        -- thickness of sample holder
+# local holder_IR = 5               -- inner radius of target holder
+# local holder_OR = 15.5            -- radius of large side of cone for holder
+# local holder_depth = 2            -- depth of non-conical aperture in holder and extraction electrode 1
+# local holder_gap = 3              -- gatp between holder and first electrode  
+# local ext1_OR = 14.2              -- radius of large side of cone for extraction electrode 1
+# local ext1_gap = 6.5              -- gap betwwen extraction electrode 1 and extraction electrode 2
+# local source_outRad = 25.4 	    -- outer radius of sample holder
+# local ext_length = 4.75           -- length of extraction electrodes  
+# local ext_inRad = 7.5             -- inner radius of extraction electrodes
+# local ext_gap = 4.75              -- gap between extraction electrodes
+
+# -- Bender ---------------------------------------------------------- 
+
+# local quad_r = 11.8                                  -- quadrupole rod radius
+# local quad_l = 35                                    -- length of quadrupole rods
+# local quad_sep = 31.2                                -- side length of square with corners at quadrupole rod cylinder center axes    
+# local bend_box_l = 47.625                            -- x,y-side length of box (outer edges)
+# local bend_box_h = 51.5                              -- z-height of box (outer edges)
+# local bend_box_t = 3.175                             -- thickness of box plates
+# local bend_slit_w = 7.62                             -- width of slit in bender box
+# local bend_slit_h = 25.4                             -- height of slit in bender box
+# local bend_box_corn = 8.7                            -- length to remove from box corners since plates do not meet 
+# local gap_bender_holder = bend_box_l/2 + 11          -- distance between end of last ring electrode and mid-bender box (11 is offset to fit CF flange)
+
+# -- Hint: the optimum ratio of r/r0 is 1.1486 and mine is 1.1537 -----  
+
+# -- Split Einzel lens -------------------- 
+
+# local Einz_offset = 138      -- offset from bender box output to far end of split einzel lens (mounted from this side irl)
+# local Einz_length = 44       -- length for 1st and 3rd einzel lens segments (middle segment is 1/2 this length)
+# local Einz_IR = 7.5 	       -- einzel lens inner radius
+# local Einz_OR = 9.5 	       -- einsel lens outer radius
+# local Einz_gap = 4.75        -- gap between einzel lens cyclinder segments (longitudinal)   
+# local Einz_split_arc = 80    -- angle covered by each split segmant of center electrode
+
+# -- Vacuum chamber dimensions for ground shield modeling ----------------------
+
+# local cross_IR = 30              -- nominal inner radius of vacuum tubes
+# local cross_length = 105         -- length of cross from center to flange
+# local cross_tube_length = 70     -- arm length of cross from flange to OD of perpendicular tube
+# local GV_length = 70             -- flange-toflange length of gate valve
+# local Einz_flange_length = 17    -- thickness of flange that holds split einzel lens assembly
+
+# -- Reducer for Vacuum chamber to drift tube ----------------------------------
+
+# local red_IR = 19.05             -- Inner radius of reducer
+# local red_OR = 56.769            -- Outer radius of reducer
+# local red_length = 17.272        -- Reducer length (beamwise)
+# local red_offset = 40.328        -- offset from the end of the SEL to the start of the reducer
+
+# -- Drift tube -----------------------------
+
+# local DT_length = 609.6        -- length of the drift tube (2ft in mm)
+# local DT_IR = 17.4             -- drift tube inner radius 
+# local DT_OR = 19.05            -- drift tube outer radius
+
+# -- Faraday Cup enclosure (4-way cross) -----------------------------
+
+# local fc_cross_length = 62.5  -- length of cross from center to flange
+# local fc_cross_IR = 17.4      -- inner radius of the cross 
+# local fc_cross_OR = 19.05     -- outer radius of the cross
+
+# -- Faraday cup -----------------------------
+
+# local fc_def_length = 3.175                       -- Faraday cup deflector length (beamwise)
+# local fc_body_length = 5.842                      -- Faraday cup body length (beamwise)
+# local fc_aperture = 0.66                          -- Radius of Faraday cup apertures
+# local fc_def_OR = 14.2875                         -- Outer radius of the Faraday cup deflector 
+# local fc_def_IR = 1.32                            -- Inner radius of the Faraday cup deflector 
+# local fc_body_IR = 8.89                           -- Inner radius of the Faraday cup body
+# local fc_body_OR = 12.7                           -- Outer radius of the Faraday cup body
+# local fc_body_offset = 1.78                       -- Offset between faraday cup deflector and body (ceramic bushing)
+# local fc_body_cap_length = 0.659                  -- Faraday cup body entrance aperture thickness (beamwise) IS ACTUALLY 0.508 mm
+# local fc_collector_offset = 1.016                 -- Offset from the end of the faraday cup cap to the start of the collector 
+# local fc_collector_head_OR = 3.9751               -- Outer radius of the faraday cup collector head
+# local fc_collector_screw_OR = 2.413               -- Outer radius of the faraday cup collector screw
+# local fc_collector_head_length = 4.826            -- Length of the faraday cup collector head (beamwise)
+# local fc_collector_head_inner_length = 2.97688    -- Depth of the inner hex-hole in the faraday cup collector head 
+# local fc_collector_screw_length = 6.35            -- Length of the screw of the faraday cup collector
+# local fc_collector_screw_inner_length = 5.6642    -- Depth of the innermost circular hole in the faraday cup collector 
+# local fc_collector_head_IR = 1.984375             -- Inner radius of the faraday cup collector head 
+# local fc_collector_screw_IR =  0.6604             -- Inner radius of the faraday cup collector screw
+
+# --------------------------------------------
+
+pa_define(320,2000,140,p,none,electrostatic,$(dx),$(dx),$(dx), surface=fractional)
+
+# -- Sample Holder ---------------------------
+locate(0,$(y_offset),$(z_offset),1,0,0,0){
+e(1) { rotate_fill(360) { within { polyline($(x_offset),0, $(x_offset+1),0, $(x_offset+1),$(holder_IR), $(x_offset+holder_depth+1),$(holder_IR), $(x_offset+holder_length),$(holder_OR), $(x_offset+holder_length),$(source_outRad), $(x_offset),$(source_outRad)) } } }
+
+# x_offset = x_offset + holder_length + holder_gap
+
+# -- 5 Extraction Electrodes ---------------------------
+e(2) { rotate_fill(360) { within { polyline($(x_offset), $(ext_inRad), $(x_offset+holder_depth),$(ext_inRad), $(x_offset+ext_length),$(ext1_OR), $(x_offset+ext_length), $(source_outRad), $(x_offset), $(source_outRad) ) } } }
+# x_offset = x_offset + ext_length + ext1_gap
+e(3) { rotate_fill(360) { within { box( $(x_offset), $(ext_inRad), $(x_offset+ext_length), $(source_outRad)) } } }
+# x_offset = x_offset + ext_length + ext_gap
+e(4) { rotate_fill(360) { within { box( $(x_offset), $(ext_inRad), $(x_offset+ext_length), $(source_outRad)) } } }
+# x_offset = x_offset + ext_length + ext_gap
+e(5) { rotate_fill(360) { within { box( $(x_offset), $(ext_inRad), $(x_offset+ext_length), $(source_outRad)) } } }
+# x_offset = x_offset + ext_length + ext_gap
+locate($(x_offset),0,0,1,0,0,55){
+e(6) { rotate_fill(80) { within { box(0, $(ext_inRad), $(ext_length), $(source_outRad)) } } }
+}
+locate($(x_offset),0,0,1,0,0,145){
+e(7) { rotate_fill(80) { within { box(0, $(ext_inRad), $(ext_length), $(source_outRad)) } } }
+}
+locate($(x_offset),0,0,1,0,0,235){
+e(8) { rotate_fill(80) { within { box(0, $(ext_inRad), $(ext_length), $(source_outRad)) } } }
+}
+locate($(x_offset),0,0,1,0,0,325){
+e(9) { rotate_fill(80) { within { box(0, $(ext_inRad), $(ext_length), $(source_outRad)) } } }
+}
+
+# -- locate($(x_offset),0,0,1,-90,0,0){
+# -- e(6) { fill { within { cylinder( 0, 0, 0, $(source_outRad), , $(ext_length)) }
+# --               notin { cylinder( 0, 0, 0, $(ext_inRad), , $(ext_length)) }
+# --               notin { box3d( -$(source_outRad), -1, -$(ext_length), $(source_outRad), $(source_outRad), 0)}
+# -- } }
+# -- e(7) { fill { within { cylinder( 0, 0, 0, $(source_outRad), , $(ext_length)) }
+# --               notin { cylinder( 0, 0, 0, $(ext_inRad), , $(ext_length)) }
+# --               notin { box3d( -$(source_outRad), -$(source_outRad), -$(ext_length), $(source_outRad), 1, 0)}
+# -- } } }
+# x_offset = x_offset + ext_length + gap_bender_holder
+}
+
+# -- Source Shielding tube -----------------------------
+locate(0,$(y_offset),$(z_offset),1,0,0,0){
+e(1000) { rotate_fill(360) { within { box( 0,$(cross_IR),$(cross_tube_length),$(cross_IR+2)) }
+} }
+}
+
+
+# --Bender--------------------------------------- 
+
+# -- the origin of this locate is the center of the bender box (x,y,z) = (101.6625,35,35)
+locate($(x_offset),$(y_offset),$(z_offset),1,0,0,0){                                    
+
+locate($(quad_sep/2.0),$(quad_sep/2.0),0, 1, 0,180,0){
+e(10) { fill { within { circle( 0,0, $(quad_r),$(quad_r)) 
+						 box3d(0,0,$(-quad_l/2.0),$(quad_r),$(quad_r),$(quad_l/2.0) ) } 
+              notin {polyline(-0.1,-0.1,-0.1,$(quad_r-7),$(quad_r-7),-0.1)}
+}}
+}
+
+locate($(quad_sep/2.0),$(-quad_sep/2.0),0, 1, 0,90,0){
+e(20) { fill { within { circle( 0,0, $(quad_r),$(quad_r)) 
+						 box3d(0,0,$(-quad_l/2.0),$(quad_r),$(quad_r),$(quad_l/2.0) ) }  
+notin {polyline(-0.1,-0.1,-0.1,$(quad_r-7),$(quad_r-7),-0.1)}
+}}
+}
+
+locate($(-quad_sep/2.0),$(quad_sep/2.0),0, 1, 0,270,0){
+e(30) { fill { within { circle( 0,0, $(quad_r),$(quad_r)) 
+						 box3d(0,0,$(-quad_l/2.0),$(quad_r),$(quad_r),$(quad_l/2.0) ) }  
+notin {polyline(-0.1,-0.1,-0.1,$(quad_r-7),$(quad_r-7),-0.1)} 
+}}
+}
+
+locate($(-quad_sep/2.0),$(-quad_sep/2.0),0, 1, 0,0,0){
+e(40) { fill { within { circle( 0,0, $(quad_r),$(quad_r)) 
+						 box3d(0,0,$(-quad_l/2.0),$(quad_r),$(quad_r),$(quad_l/2.0) ) }  
+notin {polyline(-0.1,-0.1,-0.1,$(quad_r-7),$(quad_r-7),-0.1)}
+}}
+}
+
+
+e(50) { fill { 
+        within { box3d($(-bend_box_l/2.0),$(-bend_box_l/2.0),$(-bend_box_h/2.0),$(bend_box_l/2.0),$(bend_box_l/2.0),$(bend_box_h/2.0) )}
+
+        notin { box3d($(-bend_box_l/2.0+bend_box_t),$(-bend_box_l/2.0+bend_box_t),$(-bend_box_h/2.0+bend_box_t),$(bend_box_l/2.0-bend_box_t),$(bend_box_l/2.0-bend_box_t), $(bend_box_h/2.0-bend_box_t) ) }	   
+  
+        notin { box3d($(-bend_box_l/2.0),$(-bend_slit_w/2.0),$(-bend_slit_h/2.0),$(bend_box_l/2.0),$(bend_slit_w/2.0),$(bend_slit_h/2.0) ) }	   
+        notin { box3d($(-bend_slit_w/2.0),$(-bend_box_l/2.0),$(-bend_slit_h/2.0),$(bend_slit_w/2.0),$(bend_box_l/2.0),$(bend_slit_h/2.0) ) }
+  
+        notin { corn_box3d($(-bend_box_l/2.0), $(-bend_box_l/2.0),$(-bend_box_h/2.0),$(bend_box_corn),$(bend_box_corn),$(bend_box_h) ) }
+        notin { corn_box3d($(-bend_box_l/2.0),$(bend_box_l/2.0 - bend_box_corn),$(-bend_box_h/2.0),$(bend_box_corn),$(bend_box_corn),$(bend_box_h) ) }
+        notin { corn_box3d($(bend_box_l/2.0-bend_box_corn),$(-bend_box_l/2.0),$(-bend_box_h/2.0),$(bend_box_corn),$(bend_box_corn),$(bend_box_h) ) }
+        notin { corn_box3d($(bend_box_l/2.0-bend_box_corn),$(bend_box_l/2.0 - bend_box_corn),$(-bend_box_h/2.0),$(bend_box_corn),$(bend_box_corn),$(bend_box_h) ) }
+} }
+
+}
+
+# bend_box_exit = y_offset + bend_box_l/2.0 -- bend box exit set
+
+# -- Split Einzel lens after bender -----------------------------
+
+# y_offset = bend_box_exit+Einz_offset-2*Einz_gap-2.5*Einz_length
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(100) { rotate_fill(360) { within { box(0, $(Einz_IR), $(Einz_length), $(Einz_OR)) } } }
+}
+# y_offset = y_offset + Einz_length + Einz_gap
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+locate(0,0,0,1,0,0,55){
+e(101) { rotate_fill(80) { within { box(0, $(Einz_IR), $(Einz_length/2.0), $(Einz_OR)) } } }
+}
+locate(0,0,0,1,0,0,145){
+e(102) { rotate_fill(80) { within { box(0, $(Einz_IR), $(Einz_length/2.0), $(Einz_OR)) } } }
+}
+locate(0,0,0,1,0,0,235){
+e(103) { rotate_fill(80) { within { box(0, $(Einz_IR), $(Einz_length/2.0), $(Einz_OR)) } } }
+}
+locate(0,0,0,1,0,0,325){
+e(104) { rotate_fill(80) { within { box(0, $(Einz_IR), $(Einz_length/2.0), $(Einz_OR)) } } }
+} }
+
+# y_offset = y_offset + Einz_length/2.0 + Einz_gap
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(105) { rotate_fill(360) { within { box(0, $(Einz_IR), $(Einz_length),$(Einz_OR)) } } }
+}
+
+# y_offset = y_offset + Einz_length + red_offset
+
+# -- Post-bender shielding tube ----------------------------------------------
+
+locate($(x_offset),$(bend_box_exit),$(z_offset),1,0,90,0){
+e(400) { rotate_fill(360) { within { box($(-bend_box_l/2.0+cross_length-cross_tube_length),$(cross_IR), $(y_offset-bend_box_exit),$(cross_IR+2)) } } }
+}
+
+# -- Reducer ---------------------------------------------------------------
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(106) { rotate_fill(360) { within { box(0,$(red_IR), $(red_length),$(red_OR)) } } }
+}
+
+# y_offset = y_offset + red_length
+
+# -- Drift tube --------------------------------------------------------
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(107) { rotate_fill(360) { within { box(0,$(DT_IR), $(DT_length), $(DT_OR)) } } }
+}
+
+# y_offset = y_offset + DT_length
+
+# -- Faraday cup shielding (4-way cross) -------------------------------------
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(108) { rotate_fill(360) { within { box(0, $(fc_cross_IR), $(2*fc_cross_length), $(fc_cross_OR)) } } }
+}
+
+# y_offset = y_offset + fc_cross_length
+
+# -- Faraday cup -------------------------------------------------------------
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(112) { rotate_fill(360) { within { box(0, $(fc_def_IR), $(fc_def_length), $(fc_def_OR)) } } }
+}
+
+# y_offset = y_offset + fc_def_length+fc_body_offset
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(113) { rotate_fill(360) { within { polyline(0, $(fc_aperture), 0, $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_IR),$(fc_body_cap_length),$(fc_body_IR), $(fc_body_cap_length),$(fc_aperture))} } }
+}
+
+# y_offset = y_offset + fc_body_cap_length + fc_collector_offset
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(114) { rotate_fill(360) { within { polyline(0,$(fc_collector_head_IR), 0, $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), 0, $(fc_collector_head_inner_length+fc_collector_screw_inner_length),0,$(fc_collector_head_inner_length+fc_collector_screw_inner_length), $(fc_collector_screw_IR), $(fc_collector_head_inner_length), $(fc_collector_screw_IR),$(fc_collector_head_inner_length),$(fc_collector_head_IR))} } }
+}
