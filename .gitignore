@@ -1,0 +1,8 @@
+# we want to ignore all the pa files since they are huge
+*.pa*
+*.processed.gem
+*.tmp
+*ExtractionAndBenderScan*
+*TOF_Distribution*.jpg
+SelScan*.png
+IonTOFResolvability/__pycache__/TOFResolutionlib.cpython-311.pyc
