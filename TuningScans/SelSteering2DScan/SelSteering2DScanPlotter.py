@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import os
 import csv
 
-datadir = 'ke_20_sel_1800_cfocus_900'
+datadir = 'ke_20_sel_-1870'
 gen_plots = False
 
 os.chdir(os.path.realpath(os.path.dirname(__file__))+'\\data\\'+datadir)
@@ -21,8 +21,8 @@ for f in os.listdir():
     print(f)
     data = pd.read_csv(f, delimiter=',', skiprows=6)
 """
-f = 'IonStartLocationSteering_ke_20_sel_1800_cfocus_900.csv'
-data = pd.read_csv(f,delimiter = ',', skiprows = 6)
+f = 'IonStartLocationSteering_ke_20_sel_1870.csv'
+data = pd.read_csv(f,delimiter = ',', skiprows = 4)
 y_vals = data['Ypos'].unique()
 z_vals = np.sort(data['Zpos'].unique())
 p_step = y_vals[1] - y_vals[0]
@@ -58,25 +58,26 @@ for y in y_vals:
                         scan_data.append(float(data_ezslice['IonPosition']))
                         exty_plot.append(exty)
                         extz_plot.append(extz)
-            scan_min.append(min(scan_data))
-            exty_min.append(exty_plot[np.argmin(scan_data)])
-            extz_min.append(extz_plot[np.argmin(scan_data)])
-            y_plot.append(y)
-            z_plot.append(z)
-            if gen_plots == True:
-                plt.figure(str(y)+','+str(z))
-                plt.scatter(exty_plot, extz_plot, c=scan_data, s=10)
-                plt.plot(exty_min[-1], extz_min[-1], 'ro', ms=5)
-                plt.xlabel('X Sel Steering (V)')
-                plt.ylabel('Z Sel Steering (V)')
-                plt.xlim(min(exty_vals)-ext_step, max(exty_vals)+ext_step)
-                plt.ylim(min(extz_vals)-ext_step, max(extz_vals)+ext_step)
-                plt.colorbar(label="Ion displacement from axis in bender plane (mm)")
-                plt.title('Extraction Steering Sweep\nIon Start Position: ('+str(y)+', '+str(z)+')')
-                plt.gca().set_aspect('equal')
-                plt.tight_layout()
-                plt.savefig('SelScan_x_'+str(y)+'_z_'+str(z)+'.png')
-                plt.close()
+            if not len(scan_data) ==0:
+                scan_min.append(min(scan_data))
+                exty_min.append(exty_plot[np.argmin(scan_data)])
+                extz_min.append(extz_plot[np.argmin(scan_data)])
+                y_plot.append(y)
+                z_plot.append(z)
+                if gen_plots == True:
+                    plt.figure(str(y)+','+str(z))
+                    plt.scatter(exty_plot, extz_plot, c=scan_data, s=10)
+                    plt.plot(exty_min[-1], extz_min[-1], 'ro', ms=5)
+                    plt.xlabel('X Sel Steering (V)')
+                    plt.ylabel('Z Sel Steering (V)')
+                    plt.xlim(min(exty_vals)-ext_step, max(exty_vals)+ext_step)
+                    plt.ylim(min(extz_vals)-ext_step, max(extz_vals)+ext_step)
+                    plt.colorbar(label="Ion displacement from axis in bender plane (mm)")
+                    plt.title('Extraction Steering Sweep\nIon Start Position: ('+str(y)+', '+str(z)+')')
+                    plt.gca().set_aspect('equal')
+                    plt.tight_layout()
+                    plt.savefig('SelScan_x_'+str(y)+'_z_'+str(z)+'.png')
+                    plt.close()
 
 plt.figure('MinimumDistance')
 plt.scatter(y_plot,z_plot,c=scan_min, s=10)
