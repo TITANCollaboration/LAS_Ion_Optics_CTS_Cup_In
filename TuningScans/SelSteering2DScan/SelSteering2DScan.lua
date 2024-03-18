@@ -87,7 +87,7 @@ function segment.flym()
 
 file = io.open("data\\ke_20_sel_-1870\\IonStartLocationSteering_ke_20_sel_1870.csv", "w")
 --file:write("Generated from IonStartLocation.iob\nYpos,Zpos,ExtElec,Bender,SEL,RFQ,CaptureElec,End")
-file:write("Generated from IonStartLocationSteering.iob\nnumber of ions = "..nions.."\nBender = "..bender.."V\nSEL focus = "..sel_focus.."V\n Ypos,Zpos,Sel_x,Sel_z,IonPosition")
+file:write("Generated from IonStartLocationSteering.iob\nnumber of ions = "..nions.."\nBender = "..bender.."V\nSEL focus = "..sel_focus.."V\nYpos,Zpos,Sel_x,Sel_z,IonPosition")
   -- Step through all positions
   for i = 1,npoints do
     ypos = ycenter - rad_target + (i-1)*inc
