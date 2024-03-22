@@ -21,7 +21,7 @@ for f in os.listdir():
     print(f)
     data = pd.read_csv(f, delimiter=',', skiprows=6)
 """
-f = 'IonStartLocationSteering_ke_20_sel_1870.csv'
+f = 'IonStartLocationSteering_nvolts_41_npoints_65.csv'
 data = pd.read_csv(f,delimiter = ',', skiprows = 4)
 y_vals = data['Ypos'].unique()
 z_vals = np.sort(data['Zpos'].unique())
@@ -35,7 +35,7 @@ exty_min = []
 extz_min = []
 y_plot = []
 z_plot =[]
-scan_min_file = open('ExtractionSteering2DScan_data.csv', 'w', newline='')
+scan_min_file = open('Sel_steering_nvolts_41_npoints_65_test.csv', 'w', newline='')
 writer = csv.writer(scan_min_file)
 writer.writerow(['Ypos','Zpos','Scan_min','Sel_x_min','Sel_z_min'])
 

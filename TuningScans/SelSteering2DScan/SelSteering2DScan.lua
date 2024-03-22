@@ -8,9 +8,9 @@ simion.workbench_program()
 local ycenter = 35         -- center of circle in y
 local zcenter = 35         -- center of circle in z
 local rad_target = 4       -- radius of circle
-local npoints = 33         -- number of points in scan (increment = (2*range)/(n-1)) 33
-local ext_center = 0       -- voltage for extraction y,z steering at center of target
-local ext_range = 50      -- one-direction range of extraction y,z steering (-ext_*_range, ext_*_range)
+local npoints = 65         -- number of points in scan (increment = (2*range)/(n-1)) 33
+local sel_center = 0       -- voltage for extraction y,z steering at center of target
+local sel_range = 45       -- one-direction range of extraction y,z steering (-ext_*_range, ext_*_range)
 local nvolts = 41          -- number of voltages in extraction steering scan range (increment = (2*range)/(n-1)) 41
 
 local excel_enable = 0  -- Use Excel? (1=yes, 0=no)
@@ -34,7 +34,7 @@ local fc_deflector = 0      -- faraday cup deflector
 local fc_collector = 0      -- faraday cup collector
 -- figure out spacing of spots
 inc = (2*rad_target)/(npoints-1)
-sel_inc = (2*ext_range)/(nvolts-1)
+sel_inc = (2*sel_range)/(nvolts-1)
 
 nions = 1    -- adjust number of ions here
 
@@ -85,9 +85,9 @@ end
 function segment.flym()
   sim_trajectory_image_control = 1 -- don't keep trajectories
 
-file = io.open("data\\ke_20_sel_-1870\\IonStartLocationSteering_ke_20_sel_1870.csv", "w")
+file = io.open("data\\ke_20_sel_-1870\\IonStartLocationSteering_nvolts_41_npoints_65.csv", "w")
 --file:write("Generated from IonStartLocation.iob\nYpos,Zpos,ExtElec,Bender,SEL,RFQ,CaptureElec,End")
-file:write("Generated from IonStartLocationSteering.iob\nnumber of ions = "..nions.."\nBender = "..bender.."V\nSEL focus = "..sel_focus.."V\nYpos,Zpos,Sel_x,Sel_z,IonPosition")
+file:write("Generated from SelSteering2DScan.iob\nnumber of ions = "..nions.."\nBender = "..bender.."V\nSEL focus = "..sel_focus.."V\nYpos,Zpos,Sel_x,Sel_z,IonPosition")
   -- Step through all positions
   for i = 1,npoints do
     ypos = ycenter - rad_target + (i-1)*inc
@@ -110,9 +110,9 @@ file:write("Generated from IonStartLocationSteering.iob\nnumber of ions = "..nio
     ext_z = DynamicSteerVoltage_Order3(ypos,zpos, c_ez)
 		
         for ex = 1,nvolts do
-          sel_x = ext_center - ext_range + (ex-1)*sel_inc
+          sel_x = sel_center - sel_range + (ex-1)*sel_inc
           for ez = 1,nvolts do
-            sel_z = ext_center - ext_range + (ez-1)*sel_inc
+            sel_z = sel_center - sel_range + (ez-1)*sel_inc
             -- Set up data recording to file and perform trajectory calculation run.
             data_rec = {ypos,zpos,sel_x,sel_z,nil}
             print('Y pos =', ypos, 'Z pos =', zpos, 'Sel_x =', sel_x, 'Sel_z =', sel_z)
@@ -167,6 +167,12 @@ function segment.other_actions()
     sim_update_pe_surface = 1
   end
   -- These if conditionals are checked each time-step on each ion in the run. Very useful for recording individual ion data at some point in the run.
+  
+  --ensure ion is not sneaking around the cup  
+  if(rec_pos1~=ion_number and ion_py_mm >= 934 and (ion_pz_mm>=40 or ion_pz_mm<=30 or ion_px_mm>=110 or ion_px_mm<=93))
+  then
+    rec_pos1 = ion_number
+  end
   -- record ion location at faraday cup aperture
   if (ion_py_mm >= 933 and ion_py_mm<= 944.1 and rec_pos1 ~= ion_number and ion_px_mm>=98 and ion_px_mm<=106 and ion_pz_mm>=31.3 and ion_pz_mm<=38.5)
   then
