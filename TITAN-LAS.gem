@@ -3,7 +3,9 @@
 
 # -- Spacing/dimensions ------------------------------
 
-# local dx = 0.5           -- sets scale of pa_define (0.5 means 0.5 mm/unit)
+# local dx = 0.25          -- sets scale of pa_define (0.5 means 0.5 mm/unit)
+# local dz = 0.25         
+# local dy = 0.5            
 # local x_offset = 13      -- keeps track of where to start optics in the x-axis
 # local y_offset = 35      -- keeps track of where to start optics in the y-axis starts at center of holder optics
 # local z_offset = 35      -- z-axis location for center of ion optics (should be half of pa size)
@@ -78,12 +80,12 @@
 
 # local fc_def_length = 3.175                       -- Faraday cup deflector length (beamwise)
 # local fc_body_length = 5.842                      -- Faraday cup body length (beamwise)
-# local fc_aperture = 0.66                          -- Radius of Faraday cup apertures
+# local fc_aperture = 2.0                           -- Radius of Faraday cup apertures
 # local fc_def_OR = 14.2875                         -- Outer radius of the Faraday cup deflector 
 # local fc_body_IR = 8.89                           -- Inner radius of the Faraday cup body
 # local fc_body_OR = 12.7                           -- Outer radius of the Faraday cup body
 # local fc_body_offset = 1.78                       -- Offset between faraday cup deflector and body (ceramic bushing)
-# local fc_body_cap_length = 0.659                  -- Faraday cup body entrance aperture thickness (beamwise) IS ACTUALLY 0.508 mm
+# local fc_body_cap_length = 0.508                  -- Faraday cup body entrance aperture thickness (beamwise) IS ACTUALLY 0.508 mm
 # local fc_collector_offset = 1.016                 -- Offset from the end of the faraday cup cap to the start of the collector 
 # local fc_collector_head_OR = 3.9751               -- Outer radius of the faraday cup collector head
 # local fc_collector_screw_OR = 2.413               -- Outer radius of the faraday cup collector screw
@@ -91,12 +93,11 @@
 # local fc_collector_head_inner_length = 2.97688    -- Depth of the inner hex-hole in the faraday cup collector head 
 # local fc_collector_screw_length = 6.35            -- Length of the screw of the faraday cup collector
 # local fc_collector_screw_inner_length = 5.6642    -- Depth of the innermost circular hole in the faraday cup collector 
-# local fc_collector_head_IR = 1.984375             -- Inner radius of the faraday cup collector head 
-# local fc_collector_screw_IR =  0.6604             -- Inner radius of the faraday cup collector screw
+# local fc_collector_head_IR = 2.0                  -- Inner radius of the faraday cup collector head 
 
 # --------------------------------------------
 
-pa_define(320,2000,140,p,none,electrostatic,$(dx),$(dx),$(dx), surface=fractional)
+pa_define(640,2000,280,p,none,electrostatic,$(dx),$(dy),$(dz), surface=fractional)
 
 # -- Sample Holder ---------------------------
 locate(0,$(y_offset),$(z_offset),1,0,0,0){
@@ -242,36 +243,60 @@ e(106) { rotate_fill(360) { within { box(0,$(red_IR), $(red_length),$(red_OR)) }
 
 # y_offset = y_offset + red_length
 
-# -- Drift tube --------------------------------------------------------
+# -- Faraday cup 1 shielding (4-way cross) -------------------------------------
 
 locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(107) { rotate_fill(360) { within { box(0,$(DT_IR), $(DT_length), $(DT_OR)) } } }
-}
-
-# y_offset = y_offset + DT_length
-
-# -- Faraday cup shielding (4-way cross) -------------------------------------
-
-locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(108) { rotate_fill(360) { within { box(0, $(fc_cross_IR), $(2*fc_cross_length), $(fc_cross_OR)) } } }
+e(107) { rotate_fill(360) { within { box(0, $(fc_cross_IR), $(2*fc_cross_length), $(fc_cross_OR)) } } }
 }
 
 # y_offset = y_offset + fc_cross_length
 
-# -- Faraday cup -------------------------------------------------------------
+# -- Faraday Cup 1 --------------------------------------------------------
 
 locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(112) { rotate_fill(360) { within { box(0, $(fc_aperture), $(fc_def_length), $(fc_def_OR)) } } }
+e(108) { rotate_fill(360) { within { box(0, $(fc_aperture), $(fc_def_length), $(fc_def_OR)) } } }
+}
+
+locate($(x_offset),$(y_offset+fc_def_length+fc_body_offset),$(z_offset),1,0,90,0){
+e(109) { rotate_fill(360) { within { polyline(0, $(fc_aperture), 0, $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_IR),$(fc_body_cap_length),$(fc_body_IR), $(fc_body_cap_length),$(fc_aperture))} } }
+}
+
+locate($(x_offset),$(y_offset + fc_def_length + fc_body_offset + fc_body_cap_length + fc_collector_offset),$(z_offset),1,0,90,0){
+e(110) { rotate_fill(360) { within { polyline(0,$(fc_collector_head_IR), 0, $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), 0, $(fc_collector_head_inner_length+fc_collector_screw_inner_length),0,$(fc_collector_head_inner_length+fc_collector_screw_inner_length), $(fc_aperture), $(fc_collector_head_inner_length), $(fc_aperture),$(fc_collector_head_inner_length),$(fc_collector_head_IR))} } }
+}
+
+#y_offset = y_offset + fc_cross_length 
+
+# -- Drift tube --------------------------------------------------------
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(111) { rotate_fill(360) { within { box(0,$(DT_IR), $(DT_length), $(DT_OR)) } } }
+}
+
+# y_offset = y_offset + DT_length
+
+# -- Faraday cup 2 shielding (4-way cross) -------------------------------------
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(112) { rotate_fill(360) { within { box(0, $(fc_cross_IR), $(2*fc_cross_length), $(fc_cross_OR)) } } }
+}
+
+# y_offset = y_offset + fc_cross_length
+
+# -- Faraday cup 2 -------------------------------------------------------------
+
+locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
+e(113) { rotate_fill(360) { within { box(0, $(fc_aperture), $(fc_def_length), $(fc_def_OR)) } } }
 }
 
 # y_offset = y_offset + fc_def_length+fc_body_offset
 
 locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(113) { rotate_fill(360) { within { polyline(0, $(fc_aperture), 0, $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_IR),$(fc_body_cap_length),$(fc_body_IR), $(fc_body_cap_length),$(fc_aperture))} } }
+e(114) { rotate_fill(360) { within { polyline(0, $(fc_aperture), 0, $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_IR),$(fc_body_cap_length),$(fc_body_IR), $(fc_body_cap_length),$(fc_aperture))} } }
 }
 
 # y_offset = y_offset + fc_body_cap_length + fc_collector_offset
 
 locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(114) { rotate_fill(360) { within { polyline(0,$(fc_collector_head_IR), 0, $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), 0, $(fc_collector_head_inner_length+fc_collector_screw_inner_length),0,$(fc_collector_head_inner_length+fc_collector_screw_inner_length), $(fc_collector_screw_IR), $(fc_collector_head_inner_length), $(fc_collector_screw_IR),$(fc_collector_head_inner_length),$(fc_collector_head_IR))} } }
+e(115) { rotate_fill(360) { within { polyline(0,$(fc_collector_head_IR), 0, $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), 0, $(fc_collector_head_inner_length+fc_collector_screw_inner_length),0,$(fc_collector_head_inner_length+fc_collector_screw_inner_length), $(fc_aperture), $(fc_collector_head_inner_length), $(fc_aperture),$(fc_collector_head_inner_length),$(fc_collector_head_IR))} } }
 }
