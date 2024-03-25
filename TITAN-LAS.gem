@@ -80,7 +80,6 @@
 # local fc_body_length = 5.842                      -- Faraday cup body length (beamwise)
 # local fc_aperture = 0.66                          -- Radius of Faraday cup apertures
 # local fc_def_OR = 14.2875                         -- Outer radius of the Faraday cup deflector 
-# local fc_def_IR = 1.32                            -- Inner radius of the Faraday cup deflector 
 # local fc_body_IR = 8.89                           -- Inner radius of the Faraday cup body
 # local fc_body_OR = 12.7                           -- Outer radius of the Faraday cup body
 # local fc_body_offset = 1.78                       -- Offset between faraday cup deflector and body (ceramic bushing)
@@ -262,7 +261,7 @@ e(108) { rotate_fill(360) { within { box(0, $(fc_cross_IR), $(2*fc_cross_length)
 # -- Faraday cup -------------------------------------------------------------
 
 locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(112) { rotate_fill(360) { within { box(0, $(fc_def_IR), $(fc_def_length), $(fc_def_OR)) } } }
+e(112) { rotate_fill(360) { within { box(0, $(fc_aperture), $(fc_def_length), $(fc_def_OR)) } } }
 }
 
 # y_offset = y_offset + fc_def_length+fc_body_offset
