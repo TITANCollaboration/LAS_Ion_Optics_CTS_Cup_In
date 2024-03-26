@@ -65,12 +65,6 @@
 # local red_length = 17.272        -- Reducer length (beamwise)
 # local red_offset = 40.328        -- offset from the end of the SEL to the start of the reducer
 
-# -- Drift tube -----------------------------
-
-# local DT_length = 609.6        -- length of the drift tube (2ft in mm)
-# local DT_IR = 17.4             -- drift tube inner radius 
-# local DT_OR = 19.05            -- drift tube outer radius
-
 # -- Faraday Cup enclosure (4-way cross) -----------------------------
 
 # local fc_cross_length = 62.5  -- length of cross from center to flange
@@ -79,22 +73,22 @@
 
 # -- Faraday cup -----------------------------
 
-# local fc_def_length = 3.175                       -- Faraday cup deflector length (beamwise)
-# local fc_body_length = 5.842                      -- Faraday cup body length (beamwise)
-# local fc_aperture = 2.0                           -- Radius of Faraday cup apertures
-# local fc_def_OR = 14.2875                         -- Outer radius of the Faraday cup deflector 
-# local fc_body_IR = 8.89                           -- Inner radius of the Faraday cup body
-# local fc_body_OR = 12.7                           -- Outer radius of the Faraday cup body
-# local fc_body_offset = 1.78                       -- Offset between faraday cup deflector and body (ceramic bushing)
-# local fc_body_cap_length = 0.508                  -- Faraday cup body entrance aperture thickness (beamwise) IS ACTUALLY 0.508 mm
-# local fc_collector_offset = 1.016                 -- Offset from the end of the faraday cup cap to the start of the collector 
-# local fc_collector_head_OR = 3.9751               -- Outer radius of the faraday cup collector head
-# local fc_collector_screw_OR = 2.413               -- Outer radius of the faraday cup collector screw
-# local fc_collector_head_length = 4.826            -- Length of the faraday cup collector head (beamwise)
-# local fc_collector_head_inner_length = 2.97688    -- Depth of the inner hex-hole in the faraday cup collector head 
-# local fc_collector_screw_length = 6.35            -- Length of the screw of the faraday cup collector
-# local fc_collector_screw_inner_length = 5.6642    -- Depth of the innermost circular hole in the faraday cup collector 
-# local fc_collector_head_IR = 2.0                  -- Inner radius of the faraday cup collector head 
+# local fc_def_length = 3.175                                           -- Faraday cup deflector length (beamwise)
+# local fc_body_length = 5.842                                          -- Faraday cup body length (beamwise)
+# local fc_aperture = 2.0                                               -- Radius of Faraday cup apertures
+# local fc_def_OR = 14.2875                                             -- Outer radius of the Faraday cup deflector 
+# local fc_body_IR = 8.89                                               -- Inner radius of the Faraday cup body
+# local fc_body_OR = 12.7                                               -- Outer radius of the Faraday cup body
+# local fc_body_offset = 1.78                                           -- Offset between faraday cup deflector and body (ceramic bushing)
+# local fc_body_cap_length = 0.508                                      -- Faraday cup body entrance aperture thickness (beamwise) IS ACTUALLY 0.508 mm
+# local fc_collector_head_OR = 4.7625                                   -- Outer radius of the faraday cup collector head
+# local fc_collector_screw_OR = 3.175                                   -- Outer radius of the faraday cup collector screw
+# local fc_collector_head_length = 6.35                                 -- Length of the faraday cup collector head (beamwise)
+# local fc_collector_offset = fc_body_length - fc_collector_head_length -- Offset from the end of the faraday cup cap to the start of the collector 
+# local fc_collector_head_inner_length = 2.97688                        -- Depth of the inner hex-hole in the faraday cup collector head 
+# local fc_collector_screw_length = 6.35                                -- Length of the screw of the faraday cup collector
+# local fc_collector_screw_inner_length = 5.6642                        -- Depth of the innermost circular hole in the faraday cup collector 
+# local fc_collector_head_IR = 2.38125                                  -- Inner radius of the faraday cup collector head 
 
 # --------------------------------------------
 
@@ -268,36 +262,7 @@ e(110) { rotate_fill(360) { within { polyline(0,$(fc_collector_head_IR), 0, $(fc
 
 #y_offset = y_offset + fc_cross_length 
 
-# -- Drift tube --------------------------------------------------------
-
+# -- End Cap -----------------------------------------------------------
 locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(111) { rotate_fill(360) { within { box(0,$(DT_IR), $(DT_length), $(DT_OR)) } } }
-}
-
-# y_offset = y_offset + DT_length
-
-# -- Faraday cup 2 shielding (4-way cross) -------------------------------------
-
-locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(112) { rotate_fill(360) { within { box(0, $(fc_cross_IR), $(2*fc_cross_length), $(fc_cross_OR)) } } }
-}
-
-# y_offset = y_offset + fc_cross_length
-
-# -- Faraday cup 2 -------------------------------------------------------------
-
-locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(113) { rotate_fill(360) { within { box(0, $(fc_aperture), $(fc_def_length), $(fc_def_OR)) } } }
-}
-
-# y_offset = y_offset + fc_def_length+fc_body_offset
-
-locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(114) { rotate_fill(360) { within { polyline(0, $(fc_aperture), 0, $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_OR), $(fc_body_length+fc_body_cap_length), $(fc_body_IR),$(fc_body_cap_length),$(fc_body_IR), $(fc_body_cap_length),$(fc_aperture))} } }
-}
-
-# y_offset = y_offset + fc_body_cap_length + fc_collector_offset
-
-locate($(x_offset),$(y_offset),$(z_offset),1,0,90,0){
-e(115) { rotate_fill(360) { within { polyline(0,$(fc_collector_head_IR), 0, $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_head_OR), $(fc_collector_head_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), $(fc_collector_screw_OR), $(fc_collector_head_length+fc_collector_screw_length), 0, $(fc_collector_head_inner_length+fc_collector_screw_inner_length),0,$(fc_collector_head_inner_length+fc_collector_screw_inner_length), $(fc_aperture), $(fc_collector_head_inner_length), $(fc_aperture),$(fc_collector_head_inner_length),$(fc_collector_head_IR))} } }
+e(111) { rotate_fill(360) { within { box(0, 0, 25, $(fc_cross_OR)) } } }
 }
