@@ -8,12 +8,12 @@ particles {
     ke = 20,
     cwf = 1,
     color = 1,
-    direction = cone_direction_distribution {
-      axis = vector(1, 0, 0),
-      half_angle = 10,
-      fill = false
-    },
-    position = vector(14, 35, 35),
-    format = ""
+    direction = vector(1, 0, 0),
+    position = circle_distribution {
+      center = vector(14, 35, 35),
+      normal = vector(1, 0, 0),
+      radius = 4,
+      fill = true
+    }
   }
 }
