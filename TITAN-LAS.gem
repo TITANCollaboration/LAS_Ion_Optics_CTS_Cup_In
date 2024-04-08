@@ -3,9 +3,9 @@
 
 # -- Spacing/dimensions ------------------------------
 
-# local dx = 0.25          -- sets scale of pa_define (0.5 means 0.5 mm/unit)
-# local dy = 0.25  
-# local dz = 0.25          
+# local dx = 0.5          -- sets scale of pa_define (0.5 means 0.5 mm/unit)
+# local dy = 0.5  
+# local dz = 0.5          
           
 # local x_offset = 13      -- keeps track of where to start optics in the x-axis
 # local y_offset = 35      -- keeps track of where to start optics in the y-axis starts at center of holder optics
@@ -92,7 +92,7 @@
 
 # --------------------------------------------
 
-pa_define(640,1560,280,p,none,electrostatic, $(dx), $(dy), $(dz), surface=fractional)
+pa_define(320,780,140,p,none,electrostatic, $(dx), $(dy), $(dz), surface=fractional)
 
 # -- Sample Holder ---------------------------
 locate(0,$(y_offset),$(z_offset),1,0,0,0){
