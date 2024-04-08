@@ -75,41 +75,41 @@ c_ez[16] = -9.3333e-05      -- c33
 
 -- SEL x-axis steering 
 local c_selx ={}
-c_selx[1] = 1124894.15
-c_selx[2] = -104767.189
-c_selx[3] = 3288.35522
-c_selx[4] = -34.0630628
-c_selx[5] = -93610.9305
-c_selx[6] =  8782.80544
-c_selx[7] = -277.559376
-c_selx[8] =  2.89210910
-c_selx[9] = 2617.75171
-c_selx[10] = -246.632727
-c_selx[11] =  7.82622913
-c_selx[12] = -0.08183974
-c_selx[13] = -24.6721674
-c_selx[14] =  2.32562408
-c_selx[15] = -0.07386662
-c_selx[16] =   7.7319e-04
+c_selx[1] = 168910.985  
+c_selx[2] = 80372.8397  
+c_selx[3] = -4967.80169 
+c_selx[4] = 72.8717837  
+c_selx[5] = -9829.95483 
+c_selx[6] = -7330.99579 
+c_selx[7] = 439.616096  
+c_selx[8] = -6.38832402 
+c_selx[9] = 115.013105  
+c_selx[10] = 225.267724  
+c_selx[11] = -13.0557424 
+c_selx[12] = 0.18763862  
+c_selx[13] =  0.75446183 
+c_selx[14] = -2.32247964 
+c_selx[15] =  0.12990727 
+c_selx[16] = -0.00184471 
 
 -- SEL z-axis steering 
 local c_selz = {}
-c_selz[1] = 3350320.03
-c_selz[2] = -290538.665
-c_selz[3] = 8374.95416
-c_selz[4] = -80.2894896
-c_selz[5] = -296441.934 
-c_selz[6] = 25657.4201
-c_selz[7] = -738.859717
-c_selz[8] = 7.08281292
-c_selz[9] = 8685.32911
-c_selz[10] = -750.470560
-c_selz[11] =  21.5943440
-c_selz[12] =  -0.20701956
-c_selz[13] = -84.8682669
-c_selz[14] =  7.32222013
-c_selz[15] = -0.21055299
-c_selz[16] =  0.00201881
+c_selz[1] = -4130535.43  
+c_selz[2] =  357341.664  
+c_selz[3] = -10321.9755  
+c_selz[4] =  99.4908934  
+c_selz[5] =  313281.353  
+c_selz[6] = -27177.9575  
+c_selz[7] =  786.832228  
+c_selz[8] = -7.59703260  
+c_selz[9] = -7841.03180  
+c_selz[10] =  682.512288  
+c_selz[11] = -19.8126191  
+c_selz[12] =  0.19167001  
+c_selz[13] =  64.0799985  
+c_selz[14] = -5.60176745  
+c_selz[15] =  0.16316622  
+c_selz[16] = -0.00158233  
 
 -- Define a function to calculate the steering voltage based on y,z position using 3rd order polynmial surface
 function DynamicSteerVoltage_Order3(y, z, c)
@@ -160,7 +160,7 @@ file:write("Generated from SelSteeringTester.iob\nnumber of ions = "..nions.."\n
 		-- Adjust voltages based on equation governing 
     ext_y = DynamicSteerVoltage_Order3(ypos,zpos, c_ey)
     ext_z = DynamicSteerVoltage_Order3(ypos,zpos, c_ez)
-	sel_x = DynamicSteerVoltage_Order3(ypos,zpos,c_selx)
+	  sel_x = DynamicSteerVoltage_Order3(ypos,zpos,c_selx)
     sel_z = DynamicSteerVoltage_Order3(ypos,zpos,c_selz)
     -- Set up data recording to file and perform trajectory calculation run.
     data_rec = {ypos,zpos,sel_x,sel_z,nil}
@@ -216,7 +216,7 @@ function segment.other_actions()
   end
   -- These if conditionals are checked each time-step on each ion in the run. Very useful for recording individual ion data at some point in the run.
   -- record ion location at faraday cup aperture
-  if (ion_py_mm >= 933 and ion_py_mm<= 944.1 and rec_pos1 ~= ion_number and ion_px_mm>=98 and ion_px_mm<=106 and ion_pz_mm>=31.3 and ion_pz_mm<=38.5)
+  if (ion_py_mm >= 322 and ion_py_mm<= 331 and rec_pos1 ~= ion_number and ion_px_mm>=99 and ion_px_mm<=104.5 and ion_pz_mm>=32.5 and ion_pz_mm<=37.5)
   then
     data_rec[6] = (abs(ion_px_mm - 101.6625)^2 + abs(ion_pz_mm - 35)^2)^0.5
     rec_pos1 = ion_number
